@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "b2f8a3b1-2e9a-4f3e-8a77-1f1d9b9a7c11",
+  "alias": "FaqAccordionWebPart",
+  "componentType": "WebPart",
+
+  "version": "*",
+  "manifestVersion": 2,
+
+  "requiresCustomScript": false,
+  "supportedHosts": ["SharePointWebPart", "SharePointFullPage"],
+
+  "supportsThemeVariants": true,
+
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Other" },
+    "title": { "default": "FAQ Accordion" },
+    "description": { "default": "Two-level accordion for FAQs grouped by Category and Question." },
+    "officeFabricIconFontName": "QuestionnaireMirrored",
+    "properties": {
+      "title": "Frequently Asked Questions",
+      "anchorId": "",
+      "siteUrl": "",
+      "listId": "",
+      "setId": "",
+      "stylePreset": "grey-blue"
+    }
+  }]
+}

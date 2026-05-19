@@ -1,0 +1,161 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.faqAccordion {
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
+  // When an anchor ID is set, jumping to this section via #anchor would normally
+  // land under SharePoint's sticky header. scroll-margin-top reserves enough
+  // space above the element for the header so the title is visible after the jump.
+  scroll-margin-top: 80px;
+
+  .heading {
+    margin: 0 0 12px 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .searchBox {
+    margin-bottom: 12px;
+    max-width: 360px;
+  }
+
+  .category {
+    border: 1px solid "[theme:neutralLight, default: #edebe9]";
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background: "[theme:white, default: #ffffff]";
+    overflow: hidden;
+  }
+
+  .categoryHeader {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 12px 16px;
+    background: "[theme:neutralLighter, default: #f3f2f1]";
+    background: var(--faq-category-bg, "[theme:neutralLighter, default: #f3f2f1]");
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: left;
+    color: "[theme:bodyText, default: #323130]";
+    color: var(--faq-category-color, "[theme:bodyText, default: #323130]");
+    font-family: var(--faq-category-font, inherit);
+    font-weight: var(--faq-category-weight, 600);
+
+    &:hover {
+      // Slightly darken whatever background is in effect.
+      filter: brightness(0.96);
+    }
+
+    &:focus {
+      outline: 1px solid "[theme:themePrimary, default: #0078d4]";
+      outline-offset: -1px;
+    }
+  }
+
+  .chevron {
+    margin-right: 10px;
+    transition: transform 150ms ease-in-out;
+    font-size: 12px;
+  }
+
+  .chevronOpen {
+    transform: rotate(90deg);
+  }
+
+  .countBadge {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 400;
+    // Inherit the category header's color so the count badge stays readable
+    // whether the background is light or dark. The opacity dims it slightly
+    // so it reads as secondary text without losing contrast.
+    color: inherit;
+    opacity: 0.75;
+  }
+
+  .questionsList {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .question {
+    border-top: 1px solid "[theme:neutralLight, default: #edebe9]";
+  }
+
+  .questionHeader {
+    display: flex;
+    // Align icon with the top of the first line of text so long, wrapped
+    // questions don't push the chevron into the middle of the block.
+    align-items: flex-start;
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    background: "[theme:white, default: #ffffff]";
+    background: var(--faq-question-bg, "[theme:white, default: #ffffff]");
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: left;
+    color: "[theme:bodyText, default: #323130]";
+    color: var(--faq-question-color, "[theme:bodyText, default: #323130]");
+    font-family: var(--faq-question-font, inherit);
+    font-weight: var(--faq-question-weight, 500);
+
+    // Visually align the chevron icon with the first line of question text
+    // when the question wraps to multiple lines.
+    & > .chevron {
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+
+    // Let the question text fill remaining space, wrap, and honor any line
+    // breaks the author typed in the multi-line text column.
+    & > span {
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    &:hover {
+      filter: brightness(0.97);
+    }
+
+    &:focus {
+      outline: 1px solid "[theme:themePrimary, default: #0078d4]";
+      outline-offset: -1px;
+    }
+  }
+
+  .answer {
+    padding: 4px 16px 16px 40px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: "[theme:bodyText, default: #323130]";
+
+    :global {
+      p { margin: 0 0 8px 0; }
+      ul, ol { padding-left: 20px; margin: 0 0 8px 0; }
+      a {
+        color: "[theme:link, default: #0078d4]";
+        color: var(--link);
+        &:hover { color: var(--linkHovered); }
+      }
+    }
+  }
+
+  .empty,
+  .loading,
+  .error {
+    padding: 16px;
+    text-align: center;
+    color: "[theme:neutralSecondary, default: #605e5c]";
+  }
+
+  .error {
+    color: "[theme:errorText, default: #a4262c]";
+  }
+}

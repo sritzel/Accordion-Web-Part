@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "faq-accordion-client-side-solution",
+    "id": "61fd5b12-6c34-418b-aad4-aa702c49d0f5",
+    "version": "1.0.5.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "faq-accordion description"
+      },
+      "longDescription": {
+        "default": "faq-accordion description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "faq-accordion Feature",
+        "description": "The feature that activates elements of the faq-accordion solution.",
+        "id": "100c5f38-4091-429f-8cd9-d562784649fd",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/faq-accordion.sppkg"
+  }
+}
