@@ -32,3 +32,6 @@ obj
 
 # Styles Generated Code
 *.scss.ts
+
+# Developer-specific SPFx serve config (contains tenant URL — keep out of source control)
+config/serve.json
