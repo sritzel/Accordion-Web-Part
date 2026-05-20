@@ -17,7 +17,8 @@ module.exports = {
         // Require Jest module mocking APIs to be called before any other statements in their code block. https://www.npmjs.com/package/@rushstack/eslint-plugin
         '@rushstack/hoist-jest-mock': 1,
         // Require regular expressions to be constructed from string constants rather than dynamically building strings at runtime. https://www.npmjs.com/package/@rushstack/eslint-plugin-security
-        '@rushstack/security/no-unsafe-regexp': 1,
+        // Promoted from warn (1) to error (2): regex injection is a real risk.
+        '@rushstack/security/no-unsafe-regexp': 2,
         // STANDARDIZED BY:   @typescript-eslint\eslint-plugin\dist\configs\recommended.json
         '@typescript-eslint/adjacent-overload-signatures': 1,
         // RATIONALE:         Code is more readable when the type of every variable is immediately obvious.
@@ -169,7 +170,8 @@ module.exports = {
         // STANDARDIZED BY:   eslint\conf\eslint-recommended.js
         'no-empty-pattern': 1,
         // RATIONALE:         Eval is a security concern and a performance concern.
-        'no-eval': 1,
+        // Promoted from warn (1) to error (2): eval is never acceptable in this codebase.
+        'no-eval': 2,
         // RATIONALE:         Catches code that is likely to be incorrect
         // STANDARDIZED BY:   eslint\conf\eslint-recommended.js
         'no-ex-assign': 2,
@@ -219,7 +221,8 @@ module.exports = {
         // RATIONALE:         Catches a common coding mistake.
         'no-return-assign': 2,
         // RATIONALE:         Security risk.
-        'no-script-url': 1,
+        // Promoted from warn (1) to error (2): javascript: URLs are an XSS vector.
+        'no-script-url': 2,
         // STANDARDIZED BY:   eslint\conf\eslint-recommended.js
         'no-self-assign': 2,
         // RATIONALE:         Catches a common coding mistake.

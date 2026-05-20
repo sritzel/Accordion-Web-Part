@@ -3,7 +3,7 @@
   "solution": {
     "name": "faq-accordion-client-side-solution",
     "id": "61fd5b12-6c34-418b-aad4-aa702c49d0f5",
-    "version": "1.0.5.0",
+    "version": "1.1.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "faq-accordion Feature",
         "description": "The feature that activates elements of the faq-accordion solution.",
         "id": "100c5f38-4091-429f-8cd9-d562784649fd",
-        "version": "1.0.0.0"
+        "version": "1.1.0.0"
       }
     ]
   },

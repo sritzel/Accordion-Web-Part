@@ -9,6 +9,8 @@
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "outDir": "lib",
     "inlineSources": false,

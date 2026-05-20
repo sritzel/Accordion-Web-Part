@@ -5,8 +5,18 @@ import {
   IPropertyPaneConfiguration,
   IPropertyPaneDropdownOption,
   PropertyPaneTextField,
-  PropertyPaneDropdown
+  PropertyPaneDropdown,
+  PropertyPaneLabel
 } from '@microsoft/sp-property-pane';
+
+// Pull the version from package-solution.json so the property pane always
+// shows the same version that ships in the .sppkg. require() is used here
+// (instead of import) because that file lives outside TypeScript's src/
+// rootDir, and import would trigger a "not under rootDir" compiler error.
+// webpack handles the JSON resolution at bundle time without issue.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packageSolution: { solution: { version: string } } = require('../../../config/package-solution.json');
+const PACKAGE_VERSION: string = packageSolution.solution.version;
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 
@@ -88,7 +98,12 @@ function getPreset(key: string): IStylePreset {
 export interface IFaqAccordionWebPartProps {
   title: string;
   anchorId: string;  // optional HTML id for jump-to-section links (#anchorId)
-  siteUrl: string;   // absolute URL of the site that contains the list; blank = current site
+  // Absolute URL of the site that contains the list; blank = current site.
+  // Security note: this lets editors point the web part at any site URL, but
+  // SharePoint REST always enforces the viewing user's permissions. Users
+  // cannot see lists they don't already have access to — the property only
+  // controls *where* the web part looks, not *what* permissions it uses.
+  siteUrl: string;
   listId: string;
 
   // Filtering — by Set (lookup column auto-detected from the FAQ list schema)
@@ -144,7 +159,11 @@ export default class FaqAccordionWebPart extends BaseClientSideWebPart<IFaqAccor
       }
     );
 
-    const wrapped = React.createElement(ErrorBoundary, null, inner);
+    const wrapped = React.createElement(
+      ErrorBoundary,
+      { displayMode: this.displayMode },
+      inner
+    );
     ReactDom.render(wrapped, this.domElement);
   }
 
@@ -307,6 +326,15 @@ export default class FaqAccordionWebPart extends BaseClientSideWebPart<IFaqAccor
                   label: 'Style preset',
                   options: STYLE_PRESETS.map(p => ({ key: p.key, text: p.label })),
                   selectedKey: this.properties.stylePreset || STYLE_PRESETS[0].key
+                })
+              ]
+            },
+            {
+              groupName: 'About',
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneLabel('versionLabel', {
+                  text: `FAQ Accordion v${PACKAGE_VERSION}`
                 })
               ]
             }

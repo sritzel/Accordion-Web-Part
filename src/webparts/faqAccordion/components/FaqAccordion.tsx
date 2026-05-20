@@ -1,4 +1,6 @@
 import * as React from 'react';
+import DOMPurify from 'dompurify';
+import { DisplayMode } from '@microsoft/sp-core-library';
 import styles from './FaqAccordion.module.scss';
 import { IFaqAccordionProps } from './IFaqAccordionProps';
 import { IFaqItem, IFaqCategoryGroup } from '../models/IFaqItem';
@@ -9,6 +11,28 @@ import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
 import { SearchBox } from '@fluentui/react/lib/SearchBox';
 import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
+
+// Sanitize SharePoint rich-text Answer content before injecting via
+// dangerouslySetInnerHTML. SharePoint already sanitizes on save in the UI,
+// but anyone with API write access could bypass that — defense in depth.
+//
+// USE_PROFILES.html allows safe HTML tags (p, a, ul, ol, li, strong, em,
+// img, table, etc.) and strips: <script>, <iframe>, on* event handlers,
+// javascript: URLs, and other XSS vectors.
+function sanitizeAnswerHtml(html: string): string {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+}
+
+// Force every link in sanitized answer HTML to open in a new tab with
+// rel="noopener noreferrer" so referrer/window.opener leaks are blocked.
+// This hook runs on every <a> tag DOMPurify processes.
+DOMPurify.addHook('afterSanitizeAttributes', (node: Element) => {
+  if (node.tagName === 'A') {
+    node.setAttribute('target', '_blank');
+    node.setAttribute('rel', 'noopener noreferrer');
+  }
+});
 
 // Plain-object "set" types. Using these instead of ES2015 Set/Map keeps the
 // component compatible with the default SPFx TypeScript lib settings.
@@ -77,6 +101,10 @@ const FaqAccordion: React.FC<IFaqAccordionProps> = (props) => {
         }
       } catch (ex) {
         if (!cancelled) {
+          // Always log the raw error to the console so developers can debug,
+          // even when the UI only shows a friendly message to end users.
+          // eslint-disable-next-line no-console
+          console.error('FAQ Accordion data load failed:', ex);
           setError(ex instanceof Error ? ex.message : String(ex));
         }
       } finally {
@@ -251,12 +279,20 @@ const FaqAccordion: React.FC<IFaqAccordionProps> = (props) => {
                 </ul>
               </div>
             )}
-            <details>
-              <summary style={{ cursor: 'pointer' }}>Technical details</summary>
-              <code style={{ display: 'block', whiteSpace: 'pre-wrap', marginTop: 6, fontSize: 12 }}>
-                {error}
-              </code>
-            </details>
+            {/*
+              Technical details (raw OData/REST response) are only shown to
+              page editors. End users see only the friendly message above —
+              no list GUIDs, field names, or stack traces are leaked.
+              Developers can still see the full error in the browser console.
+            */}
+            {displayMode === DisplayMode.Edit && (
+              <details>
+                <summary style={{ cursor: 'pointer' }}>Technical details</summary>
+                <code style={{ display: 'block', whiteSpace: 'pre-wrap', marginTop: 6, fontSize: 12 }}>
+                  {error}
+                </code>
+              </details>
+            )}
           </MessageBar>
         );
       })()}
@@ -315,9 +351,10 @@ const FaqAccordion: React.FC<IFaqAccordionProps> = (props) => {
                         <div
                           id={questionId}
                           className={styles.answer}
-                          // Answer is rich text HTML stored by SharePoint. It is sanitized
-                          // server-side when saved via the SharePoint UI.
-                          dangerouslySetInnerHTML={{ __html: item.answer }}
+                          // Answer is rich text HTML stored by SharePoint. We sanitize
+                          // client-side with DOMPurify as a defense-in-depth measure
+                          // against malicious HTML inserted via API write access.
+                          dangerouslySetInnerHTML={{ __html: sanitizeAnswerHtml(item.answer) }}
                         />
                       )}
                     </li>
